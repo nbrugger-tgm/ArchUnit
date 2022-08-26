@@ -186,4 +186,20 @@ public interface FieldsShould<CONJUNCTION extends FieldsShouldConjunction> exten
      */
     @PublicAPI(usage = ACCESS)
     CONJUNCTION notBeFinal();
+
+    /**
+     * Asserts that fields are of a type that is assignable to the according class
+     * @param cls the class the fields should be assignable to
+     * @return A syntax element that can either be used as working rule, or to continue specifying a more complex rule
+     */
+    @PublicAPI(usage = ACCESS)
+    CONJUNCTION beAssignableTo(Class<?> cls);
+
+    /**
+     * Asserts that fields are of a type that is not assignable to the according class
+     * @param cls the class the fields should not be assignable to
+     * @return A syntax element that can either be used as working rule, or to continue specifying a more complex rule
+     */
+    @PublicAPI(usage = ACCESS)
+    CONJUNCTION notBeAssignableTo(Class<?> cls);
 }

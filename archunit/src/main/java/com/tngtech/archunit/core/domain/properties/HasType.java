@@ -56,6 +56,11 @@ public interface HasType {
         public static DescribedPredicate<HasType> rawType(DescribedPredicate<? super JavaClass> predicate) {
             return GET_RAW_TYPE.is(predicate).as("raw type " + predicate.getDescription());
         }
+
+        @PublicAPI(usage = ACCESS)
+        public static DescribedPredicate<HasType> assignableTo(Class<?> type){
+            return GET_RAW_TYPE.is(JavaClass.Predicates.assignableTo(type));
+        }
     }
 
     /**

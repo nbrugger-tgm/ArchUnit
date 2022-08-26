@@ -93,4 +93,14 @@ class FieldsShouldInternal
     public FieldsShouldInternal notHaveRawType(DescribedPredicate<? super JavaClass> predicate) {
         return addCondition(not(ArchConditions.haveRawType(predicate)));
     }
+
+    @Override
+    public FieldsShouldInternal beAssignableTo(Class<?> cls) {
+        return addCondition(ArchCondition.from(HasType.Predicates.assignableTo(cls)));
+    }
+
+    @Override
+    public FieldsShouldInternal notBeAssignableTo(Class<?> cls) {
+        return addCondition(not(ArchCondition.from(HasType.Predicates.assignableTo(cls))));
+    }
 }

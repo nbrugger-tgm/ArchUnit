@@ -62,6 +62,16 @@ class FieldsThatInternal extends MembersThatInternal<JavaField, GivenFieldsInter
         return with(doNot(have(rawType(predicate))));
     }
 
+    @Override
+    public GivenFieldsInternal areAssignableTo(Class<?> cls) {
+        return with(are(assignableTo(cls)));
+    }
+
+    @Override
+    public GivenFieldsInternal areNotAssignableTo(Class<?> cls) {
+        return with(are(not(assignableTo(cls))));
+    }
+
     private GivenFieldsInternal with(DescribedPredicate<HasType> predicate) {
         return givenMembers.with(currentPredicate.add(predicate));
     }

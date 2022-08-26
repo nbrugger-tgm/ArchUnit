@@ -180,4 +180,35 @@ public interface FieldsThat<CONJUNCTION> extends MembersThat<CONJUNCTION> {
      */
     @PublicAPI(usage = ACCESS)
     CONJUNCTION areNotFinal();
+
+    /**
+     * Matches all fields with a type that {@link Class#isAssignableFrom(Class)}
+     * <p>
+     * For more fine tuned predicates use {@code haveRawType(assignableTo(yourTypePredicate))}
+     * </p>
+     *
+     * @param cls the class that the fields should be assignable to
+     * @return A syntax conjunction element, which can be completed to form a full rule
+     */
+    @PublicAPI(usage = ACCESS)
+    CONJUNCTION areAssignableTo(Class<?> cls);
+    /**
+     * Matches all fields with a type that {@link Class#isAssignableFrom(Class)}
+     * <p>
+     *     For more fine tuned predicates use {@code haveRawType(assignableTo(yourTypePredicate))}
+     * </p>
+     * @param cls the class that the fields should be assignable to
+     * @return A syntax conjunction element, which can be completed to form a full rule
+     */
+    /**
+     * Matches all fields with a type that is not assignable ({@link Class#isAssignableFrom(Class)})
+     * <p>
+     * For more fine tuned predicates use {@code haveRawType(assignableTo(yourTypePredicate))}
+     * </p>
+     *
+     * @param cls the class that the fields should not be assignable to
+     * @return A syntax conjunction element, which can be completed to form a full rule
+     */
+    @PublicAPI(usage = ACCESS)
+    CONJUNCTION areNotAssignableTo(Class<?> cls);
 }
