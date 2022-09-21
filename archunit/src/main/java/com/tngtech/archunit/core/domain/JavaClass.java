@@ -35,6 +35,7 @@ import com.tngtech.archunit.base.MayResolveTypesViaReflection;
 import com.tngtech.archunit.base.Optionals;
 import com.tngtech.archunit.base.ResolvesTypesViaReflection;
 import com.tngtech.archunit.base.Suppliers;
+import com.tngtech.archunit.core.domain.properties.CanAccess;
 import com.tngtech.archunit.core.domain.properties.CanBeAnnotated;
 import com.tngtech.archunit.core.domain.properties.HasAnnotations;
 import com.tngtech.archunit.core.domain.properties.HasModifiers;
@@ -70,7 +71,8 @@ import static java.util.Collections.emptyMap;
 import static java.util.stream.Collectors.toSet;
 
 public class JavaClass
-        implements JavaType, HasName.AndFullName, HasTypeParameters<JavaClass>, HasAnnotations<JavaClass>, HasModifiers, HasSourceCodeLocation {
+        implements JavaType, HasName.AndFullName, HasTypeParameters<JavaClass>, HasAnnotations<JavaClass>, HasModifiers, HasSourceCodeLocation,
+        CanAccess {
 
     private final Optional<Source> source;
     private final SourceCodeLocation sourceCodeLocation;
@@ -1004,23 +1006,6 @@ public class JavaClass
     }
 
     /**
-     * @return All accesses of this class to any members (fields/methods/constructors)
-     *
-     * @see #getFieldAccessesFromSelf()
-     * @see #getCodeUnitAccessesFromSelf()
-     * @see #getCodeUnitCallsFromSelf()
-     * @see #getConstructorCallsFromSelf()
-     * @see #getMethodCallsFromSelf()
-     * @see #getCodeUnitReferencesFromSelf()
-     * @see #getConstructorReferencesFromSelf()
-     * @see #getMethodReferencesFromSelf()
-     */
-    @PublicAPI(usage = ACCESS)
-    public Set<JavaAccess<?>> getAccessesFromSelf() {
-        return union(getFieldAccessesFromSelf(), getCodeUnitAccessesFromSelf());
-    }
-
-    /**
      * @return {@link #getAccessesFromSelf()} but for every class in the class hierarchy (i.e. all superclasses)
      */
     @PublicAPI(usage = ACCESS)
@@ -1032,140 +1017,31 @@ public class JavaClass
         return result.build();
     }
 
-    /**
-     * @return All accesses of this class to fields. These can be {@link JavaFieldAccess.AccessType#GET read} accesses
-     *         (e.g. {@code return this.example}) or {@link JavaFieldAccess.AccessType#SET write} accesses
-     *         (e.g. {@code this.example = example})
-     *
-     * @see #getAccessesFromSelf()
-     * @see #getCodeUnitAccessesFromSelf()
-     * @see #getCodeUnitCallsFromSelf()
-     * @see #getConstructorCallsFromSelf()
-     * @see #getMethodCallsFromSelf()
-     * @see #getCodeUnitReferencesFromSelf()
-     * @see #getConstructorReferencesFromSelf()
-     * @see #getMethodReferencesFromSelf()
-     */
+    @Override
     @PublicAPI(usage = ACCESS)
     public Set<JavaFieldAccess> getFieldAccessesFromSelf() {
         return members.getFieldAccessesFromSelf();
     }
 
-    /**
-     * @return All access of this class to other code units. This can be calls to methods/constructors (e.g. {@code someExample.call()})
-     *         or references of methods/constructors (e.g. {@code SomeExample::call})
-     *
-     * @see #getAccessesFromSelf()
-     * @see #getFieldAccessesFromSelf()
-     * @see #getCodeUnitCallsFromSelf()
-     * @see #getConstructorCallsFromSelf()
-     * @see #getMethodCallsFromSelf()
-     * @see #getCodeUnitReferencesFromSelf()
-     * @see #getConstructorReferencesFromSelf()
-     * @see #getMethodReferencesFromSelf()
-     */
-    @PublicAPI(usage = ACCESS)
-    public Set<JavaCodeUnitAccess<?>> getCodeUnitAccessesFromSelf() {
-        return union(getCodeUnitCallsFromSelf(), getCodeUnitReferencesFromSelf());
-    }
-
-    /**
-     * Returns all calls of this class to methods or constructors.
-     *
-     * @see #getAccessesFromSelf()
-     * @see #getFieldAccessesFromSelf()
-     * @see #getCodeUnitAccessesFromSelf()
-     * @see #getConstructorCallsFromSelf()
-     * @see #getMethodCallsFromSelf()
-     * @see #getCodeUnitReferencesFromSelf()
-     * @see #getConstructorReferencesFromSelf()
-     * @see #getMethodReferencesFromSelf()
-     */
-    @PublicAPI(usage = ACCESS)
-    public Set<JavaCall<?>> getCodeUnitCallsFromSelf() {
-        return union(getMethodCallsFromSelf(), getConstructorCallsFromSelf());
-    }
-
-    /**
-     * @return All method calls (e.g. a call to {@code SomeExample.someMethod()})
-     *
-     * @see #getAccessesFromSelf()
-     * @see #getFieldAccessesFromSelf()
-     * @see #getCodeUnitAccessesFromSelf()
-     * @see #getCodeUnitCallsFromSelf()
-     * @see #getConstructorCallsFromSelf()
-     * @see #getCodeUnitReferencesFromSelf()
-     * @see #getConstructorReferencesFromSelf()
-     * @see #getMethodReferencesFromSelf()
-     */
+    @Override
     @PublicAPI(usage = ACCESS)
     public Set<JavaMethodCall> getMethodCallsFromSelf() {
         return members.getMethodCallsFromSelf();
     }
 
-    /**
-     * @return All constructor calls (e.g. a call to {@code SomeExample()})
-     *
-     * @see #getAccessesFromSelf()
-     * @see #getFieldAccessesFromSelf()
-     * @see #getCodeUnitAccessesFromSelf()
-     * @see #getCodeUnitCallsFromSelf()
-     * @see #getMethodCallsFromSelf()
-     * @see #getCodeUnitReferencesFromSelf()
-     * @see #getConstructorReferencesFromSelf()
-     * @see #getMethodReferencesFromSelf()
-     */
+    @Override
     @PublicAPI(usage = ACCESS)
     public Set<JavaConstructorCall> getConstructorCallsFromSelf() {
         return members.getConstructorCallsFromSelf();
     }
 
-    /**
-     * @return All references of this class to {@link #getMethodReferencesFromSelf() method} or {@link #getConstructorReferencesFromSelf() constructor references}.
-     *
-     * @see #getAccessesFromSelf()
-     * @see #getFieldAccessesFromSelf()
-     * @see #getCodeUnitAccessesFromSelf()
-     * @see #getCodeUnitCallsFromSelf()
-     * @see #getConstructorCallsFromSelf()
-     * @see #getMethodCallsFromSelf()
-     * @see #getConstructorReferencesFromSelf()
-     * @see #getMethodReferencesFromSelf()
-     */
-    @PublicAPI(usage = ACCESS)
-    public Set<JavaCodeUnitReference<?>> getCodeUnitReferencesFromSelf() {
-        return union(getMethodReferencesFromSelf(), getConstructorReferencesFromSelf());
-    }
-
-    /**
-     * @return All method references (e.g. {@code SomeExample::someMethod})
-     *
-     * @see #getAccessesFromSelf()
-     * @see #getFieldAccessesFromSelf()
-     * @see #getCodeUnitAccessesFromSelf()
-     * @see #getCodeUnitCallsFromSelf()
-     * @see #getConstructorCallsFromSelf()
-     * @see #getMethodCallsFromSelf()
-     * @see #getCodeUnitReferencesFromSelf()
-     * @see #getConstructorReferencesFromSelf()
-     */
+    @Override
     @PublicAPI(usage = ACCESS)
     public Set<JavaMethodReference> getMethodReferencesFromSelf() {
         return members.getMethodReferencesFromSelf();
     }
 
-    /**
-     * @return All constructor references (e.g. {@code SomeExample::new})
-     *
-     * @see #getAccessesFromSelf()
-     * @see #getFieldAccessesFromSelf()
-     * @see #getCodeUnitAccessesFromSelf()
-     * @see #getCodeUnitCallsFromSelf()
-     * @see #getConstructorCallsFromSelf()
-     * @see #getMethodCallsFromSelf()
-     * @see #getCodeUnitReferencesFromSelf()
-     * @see #getMethodReferencesFromSelf()
-     */
+    @Override
     @PublicAPI(usage = ACCESS)
     public Set<JavaConstructorReference> getConstructorReferencesFromSelf() {
         return members.getConstructorReferencesFromSelf();

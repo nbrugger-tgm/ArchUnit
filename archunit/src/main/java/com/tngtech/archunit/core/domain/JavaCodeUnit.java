@@ -29,6 +29,7 @@ import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.base.ForwardingList;
 import com.tngtech.archunit.base.MayResolveTypesViaReflection;
 import com.tngtech.archunit.base.ResolvesTypesViaReflection;
+import com.tngtech.archunit.core.domain.properties.CanAccess;
 import com.tngtech.archunit.core.domain.properties.HasName;
 import com.tngtech.archunit.core.domain.properties.HasOwner;
 import com.tngtech.archunit.core.domain.properties.HasParameterTypes;
@@ -56,7 +57,7 @@ import static com.tngtech.archunit.core.domain.properties.HasName.Utils.namesOf;
  */
 public abstract class JavaCodeUnit
         extends JavaMember
-        implements HasParameterTypes, HasReturnType, HasTypeParameters<JavaCodeUnit>, HasThrowsClause<JavaCodeUnit> {
+        implements HasParameterTypes, HasReturnType, HasTypeParameters<JavaCodeUnit>, HasThrowsClause<JavaCodeUnit>, CanAccess {
 
     private final ReturnType returnType;
     private final Parameters parameters;

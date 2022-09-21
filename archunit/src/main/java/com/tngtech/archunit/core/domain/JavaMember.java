@@ -26,6 +26,7 @@ import com.google.common.collect.ImmutableSet;
 import com.tngtech.archunit.Internal;
 import com.tngtech.archunit.PublicAPI;
 import com.tngtech.archunit.base.DescribedPredicate;
+import com.tngtech.archunit.core.domain.properties.CanBeAccessed;
 import com.tngtech.archunit.core.domain.properties.CanBeAnnotated;
 import com.tngtech.archunit.core.domain.properties.HasAnnotations;
 import com.tngtech.archunit.core.domain.properties.HasDescriptor;
@@ -44,7 +45,7 @@ import static com.tngtech.archunit.core.domain.properties.HasName.Functions.GET_
 import static com.tngtech.archunit.core.domain.properties.HasType.Functions.GET_RAW_TYPE;
 
 public abstract class JavaMember implements
-        HasName.AndFullName, HasDescriptor, HasAnnotations<JavaMember>, HasModifiers, HasOwner<JavaClass>, HasSourceCodeLocation {
+        HasName.AndFullName, HasDescriptor, HasAnnotations<JavaMember>, HasModifiers, HasOwner<JavaClass>, HasSourceCodeLocation, CanBeAccessed {
 
     private final String name;
     private final String descriptor;
@@ -166,9 +167,6 @@ public abstract class JavaMember implements
     public String getDescriptor() {
         return descriptor;
     }
-
-    @PublicAPI(usage = ACCESS)
-    public abstract Set<? extends JavaAccess<?>> getAccessesToSelf();
 
     /**
      * Resolves the respective {@link Member} from the classpath.<br>
