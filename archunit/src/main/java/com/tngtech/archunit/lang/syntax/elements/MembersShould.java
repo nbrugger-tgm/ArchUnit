@@ -16,6 +16,7 @@
 package com.tngtech.archunit.lang.syntax.elements;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Member;
 
 import com.tngtech.archunit.PublicAPI;
 import com.tngtech.archunit.base.DescribedPredicate;
@@ -28,10 +29,12 @@ import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.core.domain.properties.HasName;
 import com.tngtech.archunit.core.domain.properties.HasType;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
+import sun.jvm.hotspot.debugger.win32.coff.COMDATSelectionTypes;
 
 import static com.tngtech.archunit.PublicAPI.Usage.ACCESS;
 
-public interface MembersShould<CONJUNCTION extends MembersShouldConjunction<?>> {
+public interface MembersShould<CONJUNCTION extends MembersShouldConjunction<?>>
+        extends AccessibleShould<CONJUNCTION> {
 
     /**
      * Asserts that members have a certain name (i.e. field name, method name or {@link JavaConstructor#CONSTRUCTOR_NAME}).

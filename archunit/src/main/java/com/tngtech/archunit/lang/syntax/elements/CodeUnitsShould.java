@@ -21,12 +21,15 @@ import com.tngtech.archunit.PublicAPI;
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaCodeUnit;
+import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.core.domain.properties.HasName;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
+import org.graalvm.compiler.nodes.memory.Access;
 
 import static com.tngtech.archunit.PublicAPI.Usage.ACCESS;
 
-public interface CodeUnitsShould<CONJUNCTION extends CodeUnitsShouldConjunction<?>> extends MembersShould<CONJUNCTION> {
+public interface CodeUnitsShould<CONJUNCTION extends CodeUnitsShouldConjunction<?>>
+        extends MembersShould<CONJUNCTION>, AccessorShould<CONJUNCTION> {
 
     /**
      * Asserts that {@link JavaCodeUnit JavaCodeUnits} have the specified raw parameter types.
@@ -75,13 +78,77 @@ public interface CodeUnitsShould<CONJUNCTION extends CodeUnitsShouldConjunction<
      * <br><br>
      * E.g.
      * <pre><code>
-     * {@link ArchRuleDefinition#codeUnits() codeUnits()}.{@link GivenCodeUnits#should() should()}.{@link CodeUnitsShould#onlyBeCalled() onlyBeCalled()}.{@link OnlyBeCalledSpecification#byClassesThat() byClassesThat()}.{@link ClassesThat#belongToAnyOf(Class[]) belongToAnyOf(SomeClass.class)}
+     * {@link ArchRuleDefinition#codeUnits() codeUnits()}.{@link GivenCodeUnits#should() should()}.{@link CodeUnitsShould#onlyBeCalled() onlyBeCalled()}.{@link BeCalledSpecification#byClassesThat() byClassesThat()}.{@link ClassesThat#belongToAnyOf(Class[]) belongToAnyOf(SomeClass.class)}
      * </code></pre>
      *
      * @return A syntax element that allows restricting how code units can be called
      */
     @PublicAPI(usage = ACCESS)
-    OnlyBeCalledSpecification<CONJUNCTION> onlyBeCalled();
+    BeAccessedSpecification<CONJUNCTION> onlyBeCalled();
+
+    /**
+     * Asserts that certain objects call the code units selected by this rule.
+     * <br><br>
+     * E.g.
+     * <pre><code>
+     * {@link ArchRuleDefinition#codeUnits() codeUnits()}.{@link GivenCodeUnits#should() should()}.{@link CodeUnitsShould#beCalled() beCalled()}.{@link BeCalledSpecification#byClassesThat() byClassesThat()}.{@link ClassesThat#belongToAnyOf(Class[]) belongToAnyOf(SomeClass.class)}
+     * </code></pre>
+     *
+     * @return A syntax element that allows restricting how code units can be called
+     */
+    @PublicAPI(usage = ACCESS)
+    BeAccessedSpecification<CONJUNCTION> beCalled();
+    /**
+     * Asserts that certain objects call the code units selected by this rule.
+     * <br><br>
+     * E.g.
+     * <pre><code>
+     * {@link ArchRuleDefinition#codeUnits() codeUnits()}.{@link GivenCodeUnits#should() should()}.{@link CodeUnitsShould#beCalled() beCalled()}.{@link BeCalledSpecification#byClassesThat() byClassesThat()}.{@link ClassesThat#belongToAnyOf(Class[]) belongToAnyOf(SomeClass.class)}
+     * </code></pre>
+     *
+     * @return A syntax element that allows restricting how code units can be called
+     */
+    @PublicAPI(usage = ACCESS)
+    BeAccessedSpecification<CONJUNCTION> notBeCalled();
+
+    /**
+     * Asserts that the code units only calls certain objects selected by this rule.
+     * <br><br>
+     * E.g.
+     * <pre><code>
+     * {@link ArchRuleDefinition#codeUnits() codeUnits()}.{@link GivenCodeUnits#should() should()}.{@link CodeUnitsShould#onlyCall() onlyCall()}.{@link BeCalledSpecification#byClassesThat() classesThat()}.{@link ClassesThat#belongToAnyOf(Class[]) belongToAnyOf(SomeClass.class)}
+     * </code></pre>
+     *
+     * @return A syntax element that allows restricting how code units can be called
+     */
+    @PublicAPI(usage = ACCESS)
+    CallSpecification<CONJUNCTION> onlyCall();
+
+    /**
+     * Asserts that the code units only calls certain objects selected by this rule.
+     * <br><br>
+     * E.g.
+     * <pre><code>
+     * {@link ArchRuleDefinition#codeUnits() codeUnits()}.{@link GivenCodeUnits#should() should()}.{@link CodeUnitsShould#onlyCall() onlyCall()}.{@link BeCalledSpecification#byClassesThat() classesThat()}.{@link ClassesThat#belongToAnyOf(Class[]) belongToAnyOf(SomeClass.class)}
+     * </code></pre>
+     *
+     * @return A syntax element that allows restricting how code units can be called
+     */
+    @PublicAPI(usage = ACCESS)
+    CallSpecification<CONJUNCTION> call();
+
+    /**
+     * Asserts that the code units only calls certain objects selected by this rule.
+     * <br><br>
+     * E.g.
+     * <pre><code>
+     * {@link ArchRuleDefinition#codeUnits() codeUnits()}.{@link GivenCodeUnits#should() should()}.{@link CodeUnitsShould#onlyCall() onlyCall()}.{@link BeCalledSpecification#byClassesThat() classesThat()}.{@link ClassesThat#belongToAnyOf(Class[]) belongToAnyOf(SomeClass.class)}
+     * </code></pre>
+     *
+     * @return A syntax element that allows restricting how code units can be called
+     */
+    @PublicAPI(usage = ACCESS)
+    CallSpecification<CONJUNCTION> notCall();
 
     /**
      * Asserts that {@link JavaCodeUnit JavaCodeUnits} have the specified fully qualified raw parameter type names.

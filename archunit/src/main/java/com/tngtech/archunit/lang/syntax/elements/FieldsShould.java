@@ -15,9 +15,13 @@
  */
 package com.tngtech.archunit.lang.syntax.elements;
 
+import java.lang.reflect.Method;
+
 import com.tngtech.archunit.PublicAPI;
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
+import com.tngtech.archunit.core.domain.JavaField;
+import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.core.domain.properties.HasName;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 

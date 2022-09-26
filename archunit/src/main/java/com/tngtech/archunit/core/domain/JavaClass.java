@@ -36,6 +36,7 @@ import com.tngtech.archunit.base.Optionals;
 import com.tngtech.archunit.base.ResolvesTypesViaReflection;
 import com.tngtech.archunit.base.Suppliers;
 import com.tngtech.archunit.core.domain.properties.CanAccess;
+import com.tngtech.archunit.core.domain.properties.CanBeAccessed;
 import com.tngtech.archunit.core.domain.properties.CanBeAnnotated;
 import com.tngtech.archunit.core.domain.properties.HasAnnotations;
 import com.tngtech.archunit.core.domain.properties.HasModifiers;
@@ -1860,18 +1861,6 @@ public class JavaClass
                 };
 
         /**
-         * @see #getAccessesFromSelf()
-         */
-        @PublicAPI(usage = ACCESS)
-        public static final ChainableFunction<JavaClass, Set<JavaAccess<?>>> GET_ACCESSES_FROM_SELF =
-                new ChainableFunction<JavaClass, Set<JavaAccess<?>>>() {
-                    @Override
-                    public Set<JavaAccess<?>> apply(JavaClass input) {
-                        return input.getAccessesFromSelf();
-                    }
-                };
-
-        /**
          * @see #getDirectDependenciesFromSelf()
          */
         @PublicAPI(usage = ACCESS)
@@ -1892,18 +1881,6 @@ public class JavaClass
                     @Override
                     public Set<Dependency> apply(JavaClass input) {
                         return input.getTransitiveDependenciesFromSelf();
-                    }
-                };
-
-        /**
-         * @see #getAccessesToSelf()
-         */
-        @PublicAPI(usage = ACCESS)
-        public static final ChainableFunction<JavaClass, Set<JavaAccess<?>>> GET_ACCESSES_TO_SELF =
-                new ChainableFunction<JavaClass, Set<JavaAccess<?>>>() {
-                    @Override
-                    public Set<JavaAccess<?>> apply(JavaClass input) {
-                        return input.getAccessesToSelf();
                     }
                 };
 

@@ -23,9 +23,9 @@ import com.tngtech.archunit.core.domain.JavaAccess;
 import com.tngtech.archunit.core.domain.JavaClass;
 
 class ClassAccessesCondition<T extends JavaAccess<?>> extends AnyAttributeMatchesCondition<T> {
-    private final Function<JavaClass, ? extends Collection<T>> getRelevantAccesses;
+    private final Function<? super JavaClass, ? extends Collection<T>> getRelevantAccesses;
 
-    ClassAccessesCondition(DescribedPredicate<? super T> predicate, Function<JavaClass, ? extends Collection<T>> getRelevantAccesses) {
+    ClassAccessesCondition(DescribedPredicate<? super T> predicate, Function<? super JavaClass, ? extends Collection<T>> getRelevantAccesses) {
         super(new JavaAccessCondition<>(predicate));
         this.getRelevantAccesses = getRelevantAccesses;
     }

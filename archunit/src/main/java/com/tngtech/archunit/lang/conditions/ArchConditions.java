@@ -50,6 +50,8 @@ import com.tngtech.archunit.core.domain.JavaMethodCall;
 import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.core.domain.PackageMatcher;
 import com.tngtech.archunit.core.domain.PackageMatchers;
+import com.tngtech.archunit.core.domain.properties.CanAccess;
+import com.tngtech.archunit.core.domain.properties.CanBeAccessed;
 import com.tngtech.archunit.core.domain.properties.CanBeAnnotated;
 import com.tngtech.archunit.core.domain.properties.HasAnnotations;
 import com.tngtech.archunit.core.domain.properties.HasModifiers;
@@ -76,8 +78,6 @@ import static com.tngtech.archunit.core.domain.Dependency.Predicates.dependencyT
 import static com.tngtech.archunit.core.domain.Formatters.ensureSimpleName;
 import static com.tngtech.archunit.core.domain.Formatters.formatNamesOf;
 import static com.tngtech.archunit.core.domain.Formatters.joinSingleQuoted;
-import static com.tngtech.archunit.core.domain.JavaClass.Functions.GET_ACCESSES_FROM_SELF;
-import static com.tngtech.archunit.core.domain.JavaClass.Functions.GET_ACCESSES_TO_SELF;
 import static com.tngtech.archunit.core.domain.JavaClass.Functions.GET_CODE_UNIT_CALLS_FROM_SELF;
 import static com.tngtech.archunit.core.domain.JavaClass.Functions.GET_CONSTRUCTORS;
 import static com.tngtech.archunit.core.domain.JavaClass.Functions.GET_CONSTRUCTOR_CALLS_FROM_SELF;
@@ -110,6 +110,8 @@ import static com.tngtech.archunit.core.domain.JavaMember.Predicates.declaredIn;
 import static com.tngtech.archunit.core.domain.JavaModifier.FINAL;
 import static com.tngtech.archunit.core.domain.JavaModifier.PRIVATE;
 import static com.tngtech.archunit.core.domain.JavaModifier.STATIC;
+import static com.tngtech.archunit.core.domain.properties.CanAccess.Functions.GET_ACCESSES_FROM_SELF;
+import static com.tngtech.archunit.core.domain.properties.CanBeAccessed.Functions.GET_ACCESSES_TO_SELF;
 import static com.tngtech.archunit.core.domain.properties.CanBeAnnotated.Predicates.annotatedWith;
 import static com.tngtech.archunit.core.domain.properties.CanBeAnnotated.Predicates.metaAnnotatedWith;
 import static com.tngtech.archunit.core.domain.properties.HasModifiers.Predicates.modifier;
@@ -299,10 +301,10 @@ public final class ArchConditions {
     }
 
     @PublicAPI(usage = ACCESS)
-    public static ArchCondition<JavaClass> onlyAccessClassesThat(final DescribedPredicate<? super JavaClass> predicate) {
+    public static ArchCondition<CanAccess> onlyAccessClassesThat(final DescribedPredicate<? super JavaClass> predicate) {
         ChainableFunction<JavaAccess<?>, AccessTarget> getTarget = JavaAccess.Functions.Get.target();
         DescribedPredicate<JavaAccess<?>> accessPredicate = getTarget.then(Get.owner()).is(predicate);
-        return new AllAccessesCondition("only access classes that", accessPredicate, GET_ACCESSES_FROM_SELF);
+        return new AllAccessesCondition<>("only access classes that", accessPredicate, GET_ACCESSES_FROM_SELF);
     }
 
     @PublicAPI(usage = ACCESS)
@@ -327,8 +329,8 @@ public final class ArchConditions {
     }
 
     @PublicAPI(usage = ACCESS)
-    public static ArchCondition<JavaClass> onlyBeAccessedByClassesThat(DescribedPredicate<? super JavaClass> predicate) {
-        return new AllAccessesCondition("only be accessed by classes that",
+    public static ArchCondition<CanBeAccessed> onlyBeAccessedByClassesThat(DescribedPredicate<? super JavaClass> predicate) {
+        return new AllAccessesCondition<>("only be accessed by classes that",
                 JavaAccess.Functions.Get.origin().then(Get.owner()).is(predicate), GET_ACCESSES_TO_SELF);
     }
 
@@ -358,8 +360,8 @@ public final class ArchConditions {
      * @return A condition matching accesses by packages matching any of the identifiers
      */
     @PublicAPI(usage = ACCESS)
-    public static ArchCondition<JavaClass> onlyBeAccessedByAnyPackage(String... packageIdentifiers) {
-        return new AllAccessesCondition("only be accessed by",
+    public static ArchCondition<CanBeAccessed> onlyBeAccessedByAnyPackage(String... packageIdentifiers) {
+        return new AllAccessesCondition<>("only be accessed by",
                 JavaAccessPackagePredicate.forAccessOrigin().matching(packageIdentifiers), GET_ACCESSES_TO_SELF);
     }
 

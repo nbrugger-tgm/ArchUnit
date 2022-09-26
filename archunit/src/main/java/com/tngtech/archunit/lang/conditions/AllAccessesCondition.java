@@ -22,18 +22,19 @@ import com.google.common.base.Joiner;
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaAccess;
 import com.tngtech.archunit.core.domain.JavaClass;
+import com.tngtech.archunit.core.domain.properties.CanBeAccessed;
 
-class AllAccessesCondition extends AllAttributesMatchCondition<JavaAccess<?>, JavaClass> {
-    private final Function<JavaClass, ? extends Collection<JavaAccess<?>>> getRelevantAccesses;
+class AllAccessesCondition<T> extends AllAttributesMatchCondition<JavaAccess<?>, T> {
+    private final Function<T, ? extends Collection<JavaAccess<?>>> getRelevantAccesses;
 
     AllAccessesCondition(String prefix, DescribedPredicate<JavaAccess<?>> predicate,
-            Function<JavaClass, ? extends Collection<JavaAccess<?>>> getRelevantAccesses) {
+            Function<T, ? extends Collection<JavaAccess<?>>> getRelevantAccesses) {
         super(Joiner.on(" ").join(prefix, predicate.getDescription()), new JavaAccessCondition<>(predicate));
         this.getRelevantAccesses = getRelevantAccesses;
     }
 
     @Override
-    Collection<JavaAccess<?>> relevantAttributes(JavaClass item) {
+    Collection<JavaAccess<?>> relevantAttributes(T item) {
         return getRelevantAccesses.apply(item);
     }
 }

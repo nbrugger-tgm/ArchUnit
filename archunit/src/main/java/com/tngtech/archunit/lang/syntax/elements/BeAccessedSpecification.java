@@ -22,30 +22,43 @@ import com.tngtech.archunit.core.domain.JavaCodeUnit;
 import com.tngtech.archunit.core.domain.JavaConstructor;
 import com.tngtech.archunit.core.domain.JavaMember;
 import com.tngtech.archunit.core.domain.JavaMethod;
+import com.tngtech.archunit.core.domain.PackageMatcher;
+import com.tngtech.archunit.core.domain.properties.CanAccess;
 import com.tngtech.archunit.core.domain.properties.HasName;
+import jdk.nashorn.internal.objects.annotations.Constructor;
 
 import static com.tngtech.archunit.PublicAPI.Usage.ACCESS;
 
-public interface OnlyBeCalledSpecification<CONJUNCTION> {
+@PublicAPI(usage = ACCESS)
+public interface BeAccessedSpecification<CONJUNCTION> {
+    /**
+     * Matches classes residing in a package matching any of the supplied package identifiers.
+     *
+     * @param packageIdentifiers Strings identifying packages, for details see {@link PackageMatcher}
+     * @return A syntax conjunction element, which can be completed to form a full rule
+     */
+    @PublicAPI(usage = ACCESS)
+    CONJUNCTION byAnyPackage(String... packageIdentifiers);
 
     /**
-     * Restricts allowed origins of calls to classes matching the supplied {@link DescribedPredicate}.
+     * @return A syntax element that allows restricting which classes the access should be from
+     */
+    @PublicAPI(usage = ACCESS)
+    ClassesThat<CONJUNCTION> byClassesThat();
+
+    /**
+     * Allows to restrict the access origins by matching them against the supplied {@link DescribedPredicate}.
      * <br><br>
      * Note that many predefined {@link DescribedPredicate predicates} can be found within a subclass {@code Predicates} of the
      * respective domain object or a common ancestor. For example, {@link DescribedPredicate predicates} targeting
      * {@link JavaClass} can be found within {@link JavaClass.Predicates} or one of the respective ancestors like {@link HasName.Predicates}.
      *
-     * @param predicate Restricts which classes the call should originate from. Every class that calls the respective {@link JavaCodeUnit} must match the predicate.
+     * @param predicate Restricts which classes the access should be from
      * @return A syntax conjunction element, which can be completed to form a full rule
      */
     @PublicAPI(usage = ACCESS)
     CONJUNCTION byClassesThat(DescribedPredicate<? super JavaClass> predicate);
 
-    /**
-     * @return A syntax element that allows restricting which classes the call should be from
-     */
-    @PublicAPI(usage = ACCESS)
-    ClassesThat<CONJUNCTION> byClassesThat();
 
     /**
      * Restricts allowed origins of calls to code units matching the supplied {@link DescribedPredicate}.
@@ -62,6 +75,12 @@ public interface OnlyBeCalledSpecification<CONJUNCTION> {
     CONJUNCTION byCodeUnitsThat(DescribedPredicate<? super JavaCodeUnit> predicate);
 
     /**
+     * @return A syntax element that allows restricting which code units the access should be from
+     */
+    @PublicAPI(usage = ACCESS)
+    CodeUnitsThat<CONJUNCTION> byCodeUnitsThat();
+
+    /**
      * Restricts allowed origins of calls to methods matching the supplied {@link DescribedPredicate}.
      * <br><br>
      * Note that many predefined {@link DescribedPredicate predicates} can be found within a subclass {@code Predicates} of the
@@ -76,6 +95,12 @@ public interface OnlyBeCalledSpecification<CONJUNCTION> {
     CONJUNCTION byMethodsThat(DescribedPredicate<? super JavaMethod> predicate);
 
     /**
+     * @return A syntax element that allows restricting which methods the access should be from
+     */
+    @PublicAPI(usage = ACCESS)
+    MethodsThat<CONJUNCTION> byMethodsThat();
+
+    /**
      * Restricts allowed origins of calls to constructors matching the supplied {@link DescribedPredicate}.
      * <br><br>
      * Note that many predefined {@link DescribedPredicate predicates} can be found within a subclass {@code Predicates} of the
@@ -88,4 +113,40 @@ public interface OnlyBeCalledSpecification<CONJUNCTION> {
      */
     @PublicAPI(usage = ACCESS)
     CONJUNCTION byConstructorsThat(DescribedPredicate<? super JavaConstructor> predicate);
+
+    /**
+     * Specified that only accesses from methods are asserted
+     * @return A syntax conjunction element, which can be completed to form a full rule
+     */
+    CONJUNCTION byMethods();
+
+    /**
+     * Specified that only accesses from constructors are asserted
+     * @return A syntax conjunction element, which can be completed to form a full rule
+     */
+    CONJUNCTION byConstructors();
+
+    /**
+     * Specified that only accesses from static initializers are asserted
+     * @return A syntax conjunction element, which can be completed to form a full rule
+     */
+    CONJUNCTION byStaticInitializers();
+
+    /**
+     * Specified that any accesses is asserted
+     * @return A syntax conjunction element, which can be completed to form a full rule
+     */
+    CONJUNCTION byAnything();
+
+    /**
+     * Restricts allowed origins of calls to accessors matching the supplied {@link DescribedPredicate}.
+     * <br><br>
+     * Note that many predefined {@link DescribedPredicate predicates} can be found within a subclass {@code Predicates} of the
+     * respective domain object or a common ancestor. For example, {@link DescribedPredicate predicates} targeting
+     * {@link CanAccess} can be found within {@link CanAccess.Predicates}.
+     *
+     * @param predicate Restricts which accessor the call should originate from.
+     * @return A syntax conjunction element, which can be completed to form a full rule
+     */
+    CONJUNCTION byAccessorThat(DescribedPredicate<? super CanAccess> predicate);
 }
