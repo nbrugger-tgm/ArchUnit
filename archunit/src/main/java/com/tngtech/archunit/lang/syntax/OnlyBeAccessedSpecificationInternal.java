@@ -20,12 +20,12 @@ import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.lang.conditions.ArchConditions;
 import com.tngtech.archunit.lang.syntax.elements.ClassesShouldConjunction;
 import com.tngtech.archunit.lang.syntax.elements.ClassesThat;
-import com.tngtech.archunit.lang.syntax.elements.OnlyBeAccessedSpecification;
+import com.tngtech.archunit.lang.syntax.elements.BeAccessedSpecification;
 
 import static com.tngtech.archunit.lang.conditions.ArchConditions.onlyBeAccessedByAnyPackage;
 import static com.tngtech.archunit.lang.conditions.ArchConditions.onlyBeAccessedByClassesThat;
 
-class OnlyBeAccessedSpecificationInternal implements OnlyBeAccessedSpecification<ClassesShouldConjunction> {
+class OnlyBeAccessedSpecificationInternal implements BeAccessedSpecification<ClassesShouldConjunction> {
     private final ClassesShouldInternal classesShould;
 
     OnlyBeAccessedSpecificationInternal(ClassesShouldInternal classesShould) {
@@ -39,7 +39,7 @@ class OnlyBeAccessedSpecificationInternal implements OnlyBeAccessedSpecification
 
     @Override
     public ClassesThat<ClassesShouldConjunction> byClassesThat() {
-        return new ClassesThatInternal<>(predicate -> classesShould.addCondition(ArchConditions.onlyBeAccessedByClassesThat(predicate)));
+        return new ClassesThatInternal<>(predicate -> classesShould.addCondition(onlyBeAccessedByClassesThat(predicate)));
     }
 
     @Override

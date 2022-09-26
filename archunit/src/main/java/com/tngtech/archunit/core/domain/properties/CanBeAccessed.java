@@ -33,7 +33,7 @@ public interface CanBeAccessed {
     @PublicAPI(usage = ACCESS)
     final class Predicates {
         @PublicAPI(usage = ACCESS)
-        public DescribedPredicate<CanBeAccessed> accessedBy(DescribedPredicate<? super JavaCodeUnit> predicate){
+        public static DescribedPredicate<CanBeAccessed> accessedBy(DescribedPredicate<? super JavaCodeUnit> predicate){
             return new DescribedPredicate<CanBeAccessed>("accessed by %s",predicate.getDescription()) {
                 @Override
                 public boolean test(CanBeAccessed canBeAccessed) {

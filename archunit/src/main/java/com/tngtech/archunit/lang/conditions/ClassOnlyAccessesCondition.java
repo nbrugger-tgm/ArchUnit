@@ -23,9 +23,9 @@ import com.tngtech.archunit.core.domain.JavaAccess;
 import com.tngtech.archunit.core.domain.JavaClass;
 
 class ClassOnlyAccessesCondition<T extends JavaAccess<?>> extends AllAttributesMatchCondition<T, JavaClass> {
-    private final Function<JavaClass, ? extends Collection<T>> getRelevantAccesses;
+    private final Function<? super JavaClass, ? extends Collection<T>> getRelevantAccesses;
 
-    ClassOnlyAccessesCondition(DescribedPredicate<? super T> predicate, Function<JavaClass, ? extends Collection<T>> getRelevantAccesses) {
+    ClassOnlyAccessesCondition(DescribedPredicate<? super T> predicate, Function<? super JavaClass, ? extends Collection<T>> getRelevantAccesses) {
         super("only access targets where " + predicate.getDescription(), new JavaAccessCondition<>(predicate));
         this.getRelevantAccesses = getRelevantAccesses;
     }

@@ -1333,6 +1333,10 @@ public final class ArchConditions {
     private static final ArchCondition<JavaClass> BE_LOCAL_CLASSES =
             be(LOCAL_CLASSES).describeEventsBy((__, satisfied) -> (satisfied ? "is a" : "is no") + " local class");
 
+    public static ArchCondition<? super CanBeAccessed> onlyBeAccessedByCodeUnitThat(DescribedPredicate<? super JavaCodeUnit> accessedBy) {
+        return new AllAccessesCondition<>("only be accessed by code units that", accessedBy.onResultOf(JavaAccess::getOrigin),CanBeAccessed::getAccessesToSelf);
+    }
+
     private static class HaveOnlyModifiersCondition<T extends HasModifiers & HasDescription & HasSourceCodeLocation>
             extends AllAttributesMatchCondition<T, JavaClass> {
 

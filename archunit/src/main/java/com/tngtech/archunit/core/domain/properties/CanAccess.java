@@ -23,6 +23,8 @@ import com.tngtech.archunit.core.domain.*;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import javax.swing.AbstractCellEditor;
+
 import static com.google.common.collect.Sets.union;
 import static com.tngtech.archunit.PublicAPI.Usage.ACCESS;
 

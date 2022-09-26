@@ -22,9 +22,10 @@ import com.tngtech.archunit.core.domain.JavaConstructor;
 import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.lang.conditions.ArchConditions;
 import com.tngtech.archunit.lang.syntax.elements.ClassesThat;
-import com.tngtech.archunit.lang.syntax.elements.OnlyBeCalledSpecification;
+import com.tngtech.archunit.lang.syntax.elements.BeCalledSpecification;
 
-class OnlyBeCalledSpecificationInternal<SHOULD extends AbstractMembersShouldInternal<? extends JavaCodeUnit, SHOULD>> implements OnlyBeCalledSpecification<SHOULD> {
+class OnlyBeCalledSpecificationInternal<SHOULD extends AbstractMembersShouldInternal<? extends JavaCodeUnit, SHOULD>> implements
+        BeCalledSpecification<SHOULD> {
     private final SHOULD codeUnitsShould;
 
     OnlyBeCalledSpecificationInternal(SHOULD codeUnitsShould) {

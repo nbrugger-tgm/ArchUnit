@@ -39,7 +39,7 @@ import com.tngtech.archunit.lang.conditions.ArchConditions;
 import com.tngtech.archunit.lang.syntax.elements.ClassesShould;
 import com.tngtech.archunit.lang.syntax.elements.ClassesShouldConjunction;
 import com.tngtech.archunit.lang.syntax.elements.ClassesThat;
-import com.tngtech.archunit.lang.syntax.elements.OnlyBeAccessedSpecification;
+import com.tngtech.archunit.lang.syntax.elements.BeAccessedSpecification;
 
 class ClassesShouldInternal extends ObjectsShouldInternal<JavaClass>
         implements ClassesShould, ClassesShouldConjunction {
@@ -535,7 +535,7 @@ class ClassesShouldInternal extends ObjectsShouldInternal<JavaClass>
     }
 
     @Override
-    public OnlyBeAccessedSpecification<ClassesShouldConjunction> onlyBeAccessed() {
+    public BeAccessedSpecification<ClassesShouldConjunction> onlyBeAccessed() {
         return new OnlyBeAccessedSpecificationInternal(this);
     }
 

@@ -27,13 +27,14 @@ import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ClassesTransformer;
 import com.tngtech.archunit.lang.Priority;
 import com.tngtech.archunit.lang.conditions.ArchConditions;
+import com.tngtech.archunit.lang.syntax.elements.BeAccessedSpecification;
 import com.tngtech.archunit.lang.syntax.elements.ClassesThat;
 import com.tngtech.archunit.lang.syntax.elements.MembersShould;
 import com.tngtech.archunit.lang.syntax.elements.MembersShouldConjunction;
 
 abstract class AbstractMembersShouldInternal<MEMBER extends JavaMember, SELF extends AbstractMembersShouldInternal<MEMBER, SELF>>
         extends ObjectsShouldInternal<MEMBER>
-        implements MembersShouldConjunction<MEMBER>, MembersShould<SELF> {
+        implements MembersShouldConjunction<MEMBER>, MembersShould<SELF>, ShouldInternal<SELF,MEMBER> {
 
     AbstractMembersShouldInternal(
             ClassesTransformer<? extends MEMBER> classesTransformer,
@@ -300,7 +301,7 @@ abstract class AbstractMembersShouldInternal<MEMBER extends JavaMember, SELF ext
 
     abstract SELF copyWithNewCondition(ConditionAggregator<MEMBER> newCondition);
 
-    SELF addCondition(ArchCondition<? super MEMBER> condition) {
+    public SELF addCondition(ArchCondition<? super MEMBER> condition) {
         return copyWithNewCondition(conditionAggregator.add(condition));
     }
 
@@ -331,6 +332,11 @@ abstract class AbstractMembersShouldInternal<MEMBER extends JavaMember, SELF ext
     @SuppressWarnings("unchecked")
     SELF self() {
         return (SELF) this;
+    }
+
+    @Override
+    public BeAccessedSpecification<SELF> onlyBeAccessed() {
+        return new BeAccessedSpecificationInternal(this);
     }
 
     static class MembersShouldInternal extends AbstractMembersShouldInternal<JavaMember, MembersShouldInternal> {

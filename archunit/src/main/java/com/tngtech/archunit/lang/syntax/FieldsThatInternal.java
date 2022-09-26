@@ -22,7 +22,10 @@ import com.tngtech.archunit.core.domain.properties.HasType;
 import com.tngtech.archunit.lang.syntax.elements.FieldsThat;
 
 import static com.tngtech.archunit.base.DescribedPredicate.doNot;
+import static com.tngtech.archunit.base.DescribedPredicate.not;
+import static com.tngtech.archunit.core.domain.properties.HasType.Predicates.assignableTo;
 import static com.tngtech.archunit.core.domain.properties.HasType.Predicates.rawType;
+import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
 import static com.tngtech.archunit.lang.conditions.ArchPredicates.have;
 
 class FieldsThatInternal extends MembersThatInternal<JavaField, GivenFieldsInternal>

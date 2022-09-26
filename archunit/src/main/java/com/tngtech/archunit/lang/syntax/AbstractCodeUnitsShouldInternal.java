@@ -27,7 +27,6 @@ import com.tngtech.archunit.lang.Priority;
 import com.tngtech.archunit.lang.conditions.ArchConditions;
 import com.tngtech.archunit.lang.syntax.elements.CodeUnitsShould;
 import com.tngtech.archunit.lang.syntax.elements.CodeUnitsShouldConjunction;
-import com.tngtech.archunit.lang.syntax.elements.OnlyBeCalledSpecification;
 
 import static com.tngtech.archunit.lang.conditions.ArchConditions.not;
 
@@ -150,7 +149,7 @@ abstract class AbstractCodeUnitsShouldInternal<CODE_UNIT extends JavaCodeUnit, S
     }
 
     @Override
-    public OnlyBeCalledSpecification<SELF> onlyBeCalled() {
+    public BeCalledSpecification<SELF> onlyBeCalled() {
         return new OnlyBeCalledSpecificationInternal<>(self());
     }
 
